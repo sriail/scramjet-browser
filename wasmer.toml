@@ -1,0 +1,15 @@
+[package]
+name = "sriail/scramjet-browser"
+version = "0.1.0"
+description = "Scramjet Browser"
+
+[[module]]
+name = "static-server"
+source = "wasmer/static-server:0.1.0"
+
+[[command]]
+name = "serve"
+module = "static-server"
+
+[fs]
+"/" = "src"
