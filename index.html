@@ -11,22 +11,24 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
     <style>
         :root {
-            --bg: #1a1a1a;
-            --shade: #2d2d2d;
-            --select: #4d4d4d;
-            --text: #ffffff;
+            /* Dark Mode Defaults */
+            --bg: #000000;
+            --shade: #111213;
+            --select: #1F1F21;
+            --text: #FFFFFF;
             --text-muted: #888888;
-            --radius: 16px;
-            --radius-sm: 10px;
-            --radius-xs: 7px;
-            --t: 0.18s ease;
+            --radius: 8px;
+            --radius-sm: 6px;
+            --radius-xs: 4px;
+            --t: 0.1s ease; /* Snappier transition */
         }
 
         :root[data-theme="light"] {
-            --bg: #e5e5e5;
-            --shade: #d2d2d2;
-            --select: #b2b2b2;
-            --text: #1a1a1a;
+            /* Light Mode Overrides */
+            --bg: #FFFFFF;
+            --shade: #F8F8F8;
+            --select: #E2E3E4;
+            --text: #000000;
             --text-muted: #666666;
         }
 
@@ -53,17 +55,19 @@
 
         .toolbar {
             display: flex;
-            gap: 10px;
-            padding: 12px;
+            gap: 8px;
+            padding: 10px;
             background: var(--shade);
             align-items: center;
             transition: background var(--t);
             z-index: 10;
+            flex-shrink: 0;
         }
 
         .nav-buttons {
             display: flex;
-            gap: 6px;
+            gap: 4px;
+            flex-shrink: 0;
         }
 
         button {
@@ -78,8 +82,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             font-family: inherit;
         }
 
@@ -93,22 +97,24 @@
 
         .url-bar {
             flex: 1;
+            min-width: 0; /* Fixes responsiveness on small screens */
             display: flex;
             align-items: center;
             background: var(--bg);
             border-radius: var(--radius);
-            padding: 4px 4px 4px 18px;
+            padding: 2px 2px 2px 14px;
             transition: box-shadow var(--t), background var(--t);
             position: relative;
-            height: 42px;
+            height: 40px;
         }
 
         .url-bar:focus-within {
-            box-shadow: 0 0 0 2px var(--select);
+            border-color: var(--select); /* Clean 1px border instead of thick shadow */
         }
 
         .url-bar input {
             flex: 1;
+            min-width: 0;
             border: none;
             background: transparent;
             color: var(--text);
@@ -125,7 +131,7 @@
         .settings-btn {
             width: 34px;
             height: 34px;
-            border-radius: var(--radius-sm); /* Matches the nav buttons */
+            border-radius: var(--radius-sm);
             font-size: 17px;
             flex-shrink: 0;
         }
@@ -139,21 +145,23 @@
             flex: 1;
             border: none;
             background: white;
+            min-height: 0; /* Fixes flexbox resizing */
         }
 
         /* ── Settings dropdown ── */
         .settings-dropdown {
             position: absolute;
-            top: calc(100% + 8px);
+            top: calc(100% + 6px);
             right: 0;
             background: var(--shade);
+            border: 1px solid var(--select);
             border-radius: var(--radius);
-            padding: 18px;
-            min-width: 280px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+            padding: 16px;
+            min-width: 260px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
             z-index: 1000;
             opacity: 0;
-            transform: translateY(-8px) scale(0.96);
+            transform: translateY(-4px) scale(0.98);
             pointer-events: none;
             transition: opacity var(--t), transform var(--t);
         }
@@ -165,7 +173,7 @@
         }
 
         .settings-section {
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
 
         .settings-section:last-child {
@@ -175,9 +183,9 @@
         .settings-label {
             font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 1.2px;
+            letter-spacing: 1px;
             color: var(--text-muted);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-weight: 700;
         }
 
@@ -191,7 +199,7 @@
 
         .theme-toggle button {
             flex: 1;
-            height: 34px;
+            height: 32px;
             font-size: 13px;
             font-weight: 500;
             background: transparent;
@@ -216,22 +224,22 @@
 
         .engine-select {
             width: 100%;
-            padding: 11px 36px 11px 14px;
+            padding: 10px 32px 10px 12px;
             border-radius: var(--radius-sm);
-            border: none;
+            border: 1px solid transparent;
             background: var(--bg);
             color: var(--text);
             font-size: 14px;
             font-family: inherit;
             outline: none;
             cursor: pointer;
-            transition: box-shadow var(--t), background var(--t);
+            transition: border-color var(--t), background var(--t);
             appearance: none;
             -webkit-appearance: none;
         }
 
-        .engine-select:focus {
-            box-shadow: 0 0 0 2px var(--select);
+        .engine-select:hover {
+            border-color: var(--select);
         }
 
         .engine-select option {
@@ -241,7 +249,7 @@
 
         .select-arrow {
             position: absolute;
-            right: 12px;
+            right: 10px;
             top: 50%;
             transform: translateY(-50%);
             pointer-events: none;
@@ -286,7 +294,6 @@
                     </div>
                 </div>
             </div>
-            <!-- Home button moved to the other side -->
             <button id="homeBtn" title="New Tab" aria-label="New tab"><i class="ti ti-home"></i></button>
         </div>
         <iframe id="browserFrame" title="Scramjet Browser"></iframe>
@@ -350,13 +357,13 @@
             engineSelect.value = settings.engine;
         }
 
-        /* ── new-tab page (generated dynamically so it picks up current theme + engine) ── */
+        /* ── new-tab page ── */
         function newTabHtml() {
             const isDark   = getEffectiveTheme() === 'dark';
-            const bg       = isDark ? '#1a1a1a' : '#e5e5e5';
-            const shade    = isDark ? '#2d2d2d' : '#d2d2d2';
-            const select   = isDark ? '#4d4d4d' : '#b2b2b2';
-            const text     = isDark ? '#ffffff' : '#1a1a1a';
+            const bg       = isDark ? '#000000' : '#FFFFFF';
+            const shade    = isDark ? '#111213' : '#F8F8F8';
+            const select   = isDark ? '#1F1F21' : '#E2E3E4';
+            const text     = isDark ? '#FFFFFF' : '#000000';
             const muted    = isDark ? '#888888' : '#666666';
             const engineNm = searchEngines[settings.engine].name;
 
@@ -370,20 +377,20 @@
 body{
     height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
     background:${bg};color:${text};font-family:'Inter',system-ui,sans-serif;
-    transition:background .2s,color .2s;
-    animation:fadeIn .35s ease;
+    transition:background .1s,color .1s;
+    animation:fadeIn .2s ease;
 }
-@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-h1{font-weight:800;font-size:56px;margin-bottom:32px;letter-spacing:-1.5px}
-.search-wrap{width:100%;max-width:580px;padding:0 20px}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+h1{font-weight:800;font-size:48px;margin-bottom:28px;letter-spacing:-1.5px}
+.search-wrap{width:100%;max-width:560px;padding:0 20px}
 .search-box{
-    width:100%;padding:16px 24px;border-radius:16px;border:none;
-    background:${shade};color:${text};font-size:17px;outline:none;
-    font-family:inherit;transition:box-shadow .2s,background .2s;
+    width:100%;padding:14px 20px;border-radius:8px;border:1px solid ${select};
+    background:${shade};color:${text};font-size:16px;outline:none;
+    font-family:inherit;transition:border-color .1s,background .1s;
 }
 .search-box::placeholder{color:${muted}}
-.search-box:focus{box-shadow:0 0 0 3px ${select}}
-.engine-hint{text-align:center;margin-top:14px;font-size:13px;color:${muted};font-weight:500}
+.search-box:focus{border-color:${text}}
+.engine-hint{text-align:center;margin-top:12px;font-size:12px;color:${muted};font-weight:500}
 </style>
 </head>
 <body>
@@ -411,7 +418,7 @@ document.querySelector('.search-box').addEventListener('keydown',function(e){
             iframe.srcdoc = newTabHtml();
         }
 
-        /* ── navigation: detect URL vs search query ── */
+        /* ── navigation ── */
         function navigateTo(input) {
             const trimmed = input.trim();
             if (!trimmed) return;
@@ -435,32 +442,41 @@ document.querySelector('.search-box').addEventListener('keydown',function(e){
             }
         }
 
-        /* listen for search from the new-tab iframe */
         window.addEventListener('message', e => {
             if (e.data && e.data.type === 'search') {
                 navigateTo(e.data.query);
             }
         });
 
-        /* ── settings dropdown ── */
+        /* ── settings dropdown controls ── */
+        function closeSettings() {
+            settingsDrop.classList.remove('open');
+            settingsBtn.classList.remove('active');
+        }
+
         settingsBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             const open = settingsDrop.classList.toggle('open');
             settingsBtn.classList.toggle('active', open);
         });
 
+        // Close if clicking anywhere else in the document
         document.addEventListener('click', (e) => {
             if (!settingsDrop.contains(e.target) && !settingsBtn.contains(e.target)) {
-                settingsDrop.classList.remove('open');
-                settingsBtn.classList.remove('active');
+                closeSettings();
             }
         });
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                settingsDrop.classList.remove('open');
-                settingsBtn.classList.remove('active');
+        // Close if the user clicks off into the iframe (iframe steals window focus)
+        window.addEventListener('blur', () => {
+            if (settingsDrop.classList.contains('open')) {
+                closeSettings();
             }
+        });
+
+        // Close on Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeSettings();
         });
 
         /* theme toggle buttons */
@@ -481,7 +497,7 @@ document.querySelector('.search-box').addEventListener('keydown',function(e){
             if (onNewTab) showNewTab();
         });
 
-        /* react to system theme change when in auto mode */
+        /* react to system theme change */
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
             if (settings.theme === 'auto') {
                 applyTheme();
