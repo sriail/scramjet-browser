@@ -5,11 +5,12 @@ description = "Scramjet Browser"
 
 [[module]]
 name = "static-server"
-source = "wasmer/static-server:0.1.0"
+source = "wasmer/static-web-server:0.1.0"
 
 [[command]]
 name = "serve"
 module = "static-server"
 
 [fs]
-"/" = "src"
+# Map your local "src" folder to "/public" inside the server context
+"/public" = "src"
