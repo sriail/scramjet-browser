@@ -1,6 +1,4 @@
 kind: wasmer.io/App.v1
 name: scramjet
-spec:
-  package: wasmer/static-web-server
-  cli_args:
-    - "--root=/opt/static_app/src"
+build:
+  publish_dir: src
