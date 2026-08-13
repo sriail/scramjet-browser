@@ -1,0 +1,10 @@
+[package]
+name = "sriail/scramjet"
+version = "0.1.0"
+description = "A Static Scramjet Browser"
+
+[dependencies]
+"wasmer/static-web-server" = "^1"
+
+[fs]
+public = "src"
