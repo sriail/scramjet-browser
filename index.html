@@ -20,7 +20,7 @@
             --radius: 8px;
             --radius-sm: 6px;
             --radius-xs: 4px;
-            --t: 0.1s ease; /* Snappier transition */
+            --t: 0.1s ease;
         }
 
         :root[data-theme="light"] {
@@ -72,44 +72,48 @@
 
         button {
             background: var(--bg);
-            border: none;
+            border: 1px solid transparent; /* Prevents layout shift on hover */
             color: var(--text);
             padding: 0;
             border-radius: var(--radius-sm);
             cursor: pointer;
             font-size: 18px;
-            transition: background var(--t), transform var(--t);
+            transition: background var(--t), border-color var(--t), transform var(--t);
             display: flex;
             align-items: center;
             justify-content: center;
             width: 36px;
             height: 36px;
-            font-family: inherit;
+            font-family: 'Inter', system-ui, sans-serif;
         }
 
-        button:hover {
+        /* Applied to both hover and active states for the 1px black border */
+        button:hover, button.active {
             background: var(--select);
+            border-color: #000000;
         }
 
         button:active {
             transform: scale(0.92);
         }
 
+        /* Uniform URL bar to match the search box on the new-tab page */
         .url-bar {
             flex: 1;
-            min-width: 0; /* Fixes responsiveness on small screens */
+            min-width: 0;
             display: flex;
             align-items: center;
-            background: var(--bg);
+            background: var(--shade);
             border-radius: var(--radius);
-            padding: 2px 2px 2px 14px;
-            transition: box-shadow var(--t), background var(--t);
+            padding: 4px 4px 4px 16px;
+            transition: border-color var(--t), background var(--t);
             position: relative;
-            height: 40px;
+            height: 44px; /* Matches the search page height */
+            border: 1px solid var(--select);
         }
 
         .url-bar:focus-within {
-            border-color: var(--select); /* Clean 1px border instead of thick shadow */
+            border-color: var(--text); /* Clean 1px border using text color */
         }
 
         .url-bar input {
@@ -118,9 +122,9 @@
             border: none;
             background: transparent;
             color: var(--text);
-            font-size: 14px;
+            font-size: 16px; /* Matches search page font size */
             outline: none;
-            font-family: inherit;
+            font-family: 'Inter', system-ui, sans-serif;
             height: 100%;
         }
 
@@ -136,16 +140,12 @@
             flex-shrink: 0;
         }
 
-        .settings-btn.active {
-            background: var(--select);
-        }
-
         iframe {
             width: 100%;
             flex: 1;
             border: none;
             background: white;
-            min-height: 0; /* Fixes flexbox resizing */
+            min-height: 0;
         }
 
         /* ── Settings dropdown ── */
@@ -154,7 +154,7 @@
             top: calc(100% + 6px);
             right: 0;
             background: var(--shade);
-            border: 1px solid var(--select);
+            border: 1px solid #000000;
             border-radius: var(--radius);
             padding: 16px;
             min-width: 260px;
@@ -164,6 +164,7 @@
             transform: translateY(-4px) scale(0.98);
             pointer-events: none;
             transition: opacity var(--t), transform var(--t);
+            font-family: 'Inter', system-ui, sans-serif;
         }
 
         .settings-dropdown.open {
@@ -187,6 +188,7 @@
             color: var(--text-muted);
             margin-bottom: 8px;
             font-weight: 700;
+            font-family: 'Inter', system-ui, sans-serif;
         }
 
         .theme-toggle {
@@ -204,18 +206,22 @@
             font-weight: 500;
             background: transparent;
             color: var(--text-muted);
+            border: 1px solid transparent;
             border-radius: var(--radius-xs);
             width: auto;
-            transition: background var(--t), color var(--t);
+            transition: background var(--t), color var(--t), border-color var(--t);
+            font-family: 'Inter', system-ui, sans-serif;
         }
 
         .theme-toggle button.active {
             background: var(--select);
             color: var(--text);
+            border-color: #000000;
         }
 
         .theme-toggle button:hover:not(.active) {
             color: var(--text);
+            border-color: #000000;
         }
 
         .select-wrap {
@@ -230,7 +236,7 @@
             background: var(--bg);
             color: var(--text);
             font-size: 14px;
-            font-family: inherit;
+            font-family: 'Inter', system-ui, sans-serif; /* Inter explicitly set */
             outline: none;
             cursor: pointer;
             transition: border-color var(--t), background var(--t);
@@ -239,12 +245,13 @@
         }
 
         .engine-select:hover {
-            border-color: var(--select);
+            border-color: #000000;
         }
 
         .engine-select option {
             background: var(--shade);
             color: var(--text);
+            font-family: 'Inter', system-ui, sans-serif;
         }
 
         .select-arrow {
@@ -386,7 +393,7 @@ h1{font-weight:800;font-size:48px;margin-bottom:28px;letter-spacing:-1.5px}
 .search-box{
     width:100%;padding:14px 20px;border-radius:8px;border:1px solid ${select};
     background:${shade};color:${text};font-size:16px;outline:none;
-    font-family:inherit;transition:border-color .1s,background .1s;
+    font-family:'Inter',system-ui,sans-serif;transition:border-color .1s,background .1s;
 }
 .search-box::placeholder{color:${muted}}
 .search-box:focus{border-color:${text}}
