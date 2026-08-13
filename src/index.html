@@ -5,7 +5,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scramjet</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
     <style>
+        :root {
+            --bg: #1a1a1a;
+            --shade: #2d2d2d;
+            --select: #4d4d4d;
+            --text: #ffffff;
+            --text-muted: #888888;
+            --radius: 16px;
+            --radius-sm: 10px;
+            --radius-xs: 7px;
+            --t: 0.18s ease;
+        }
+
+        :root[data-theme="light"] {
+            --bg: #e5e5e5;
+            --shade: #d2d2d2;
+            --select: #b2b2b2;
+            --text: #1a1a1a;
+            --text-muted: #666666;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,66 +37,101 @@
         }
 
         body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background: #1a1a1a;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
             height: 100vh;
             overflow: hidden;
+            color: var(--text);
+            transition: background var(--t), color var(--t);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
         }
 
         .toolbar {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             padding: 12px;
-            background: #2d2d2d;
-            border-bottom: 1px solid #3d3d3d;
+            background: var(--shade);
             align-items: center;
+            transition: background var(--t);
+            z-index: 10;
         }
 
         .nav-buttons {
             display: flex;
-            gap: 4px;
+            gap: 6px;
         }
 
         button {
-            background: #3d3d3d;
+            background: var(--bg);
             border: none;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
+            color: var(--text);
+            padding: 0;
+            border-radius: var(--radius-sm);
             cursor: pointer;
-            font-size: 14px;
-            transition: all 0.2s;
+            font-size: 18px;
+            transition: background var(--t), transform var(--t);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            font-family: inherit;
         }
 
         button:hover {
-            background: #4d4d4d;
+            background: var(--select);
         }
 
         button:active {
-            transform: scale(0.95);
+            transform: scale(0.92);
         }
 
-        input {
+        .url-bar {
             flex: 1;
-            padding: 8px 12px;
-            border-radius: 6px;
-            border: 1px solid #3d3d3d;
-            background: #1a1a1a;
-            color: white;
+            display: flex;
+            align-items: center;
+            background: var(--bg);
+            border-radius: var(--radius);
+            padding: 4px 4px 4px 18px;
+            transition: box-shadow var(--t), background var(--t);
+            position: relative;
+            height: 42px;
+        }
+
+        .url-bar:focus-within {
+            box-shadow: 0 0 0 2px var(--select);
+        }
+
+        .url-bar input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            color: var(--text);
             font-size: 14px;
             outline: none;
+            font-family: inherit;
+            height: 100%;
         }
 
-        input:focus {
-            border-color: #0066cc;
+        .url-bar input::placeholder {
+            color: var(--text-muted);
         }
 
-        .status {
-            padding: 4px 12px;
-            background: #3d3d3d;
-            border-radius: 6px;
-            font-size: 12px;
-            color: #aaa;
+        .settings-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: var(--radius-sm); /* Matches the nav buttons */
+            font-size: 17px;
+            flex-shrink: 0;
+        }
+
+        .settings-btn.active {
+            background: var(--select);
         }
 
         iframe {
@@ -82,10 +141,112 @@
             background: white;
         }
 
-        .container {
+        /* ── Settings dropdown ── */
+        .settings-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: var(--shade);
+            border-radius: var(--radius);
+            padding: 18px;
+            min-width: 280px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-8px) scale(0.96);
+            pointer-events: none;
+            transition: opacity var(--t), transform var(--t);
+        }
+
+        .settings-dropdown.open {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+
+        .settings-section {
+            margin-bottom: 18px;
+        }
+
+        .settings-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .settings-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .theme-toggle {
             display: flex;
-            flex-direction: column;
-            height: 100vh;
+            gap: 4px;
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            padding: 4px;
+        }
+
+        .theme-toggle button {
+            flex: 1;
+            height: 34px;
+            font-size: 13px;
+            font-weight: 500;
+            background: transparent;
+            color: var(--text-muted);
+            border-radius: var(--radius-xs);
+            width: auto;
+            transition: background var(--t), color var(--t);
+        }
+
+        .theme-toggle button.active {
+            background: var(--select);
+            color: var(--text);
+        }
+
+        .theme-toggle button:hover:not(.active) {
+            color: var(--text);
+        }
+
+        .select-wrap {
+            position: relative;
+        }
+
+        .engine-select {
+            width: 100%;
+            padding: 11px 36px 11px 14px;
+            border-radius: var(--radius-sm);
+            border: none;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            cursor: pointer;
+            transition: box-shadow var(--t), background var(--t);
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .engine-select:focus {
+            box-shadow: 0 0 0 2px var(--select);
+        }
+
+        .engine-select option {
+            background: var(--shade);
+            color: var(--text);
+        }
+
+        .select-arrow {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: var(--text-muted);
+            font-size: 16px;
         }
     </style>
 </head>
@@ -94,99 +255,296 @@
     <div class="container">
         <div class="toolbar">
             <div class="nav-buttons">
-                <button id="backBtn" title="Back">←</button>
-                <button id="forwardBtn" title="Forward">→</button>
-                <button id="reloadBtn" title="Reload">↻</button>
+                <button id="backBtn" title="Back" aria-label="Go back"><i class="ti ti-arrow-left"></i></button>
+                <button id="forwardBtn" title="Forward" aria-label="Go forward"><i class="ti ti-arrow-right"></i></button>
+                <button id="reloadBtn" title="Reload" aria-label="Reload page"><i class="ti ti-refresh"></i></button>
             </div>
-            <input type="text" id="urlInput" placeholder="Enter URL..." value="https://example.com">
-            <button id="goBtn">Go</button>
-            <div class="status" id="status">Ready</div>
+            <div class="url-bar">
+                <input type="text" id="urlInput" placeholder="Search or enter URL...">
+                <button class="settings-btn" id="settingsBtn" title="Settings" aria-label="Settings"><i class="ti ti-settings"></i></button>
+                <div class="settings-dropdown" id="settingsDropdown">
+                    <div class="settings-section">
+                        <div class="settings-label">Theme</div>
+                        <div class="theme-toggle">
+                            <button data-theme-val="auto">Auto</button>
+                            <button data-theme-val="light">Light</button>
+                            <button data-theme-val="dark">Dark</button>
+                        </div>
+                    </div>
+                    <div class="settings-section">
+                        <div class="settings-label">Search Engine</div>
+                        <div class="select-wrap">
+                            <select class="engine-select" id="engineSelect">
+                                <option value="ddg">DuckDuckGo</option>
+                                <option value="bing">Bing</option>
+                                <option value="google">Google</option>
+                                <option value="brave">Brave</option>
+                                <option value="qwant">Qwant</option>
+                            </select>
+                            <i class="ti ti-chevron-down select-arrow"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Home button moved to the other side -->
+            <button id="homeBtn" title="New Tab" aria-label="New tab"><i class="ti ti-home"></i></button>
         </div>
         <iframe id="browserFrame" title="Scramjet Browser"></iframe>
     </div>
+
     <script src="/scramjet/scramjet.js"></script>
     <script src="/controller/controller.api.js"></script>
-    <script src=/transport/index.js"></script>
+    <script src="/transport/index.js"></script>
 
     <script>
         const { Controller } = $scramjetController;
         const { defaultConfig } = $scramjet;
         const EpoxyTransport = self.EpoxyTransport.default;
 
-        const iframe = document.getElementById("browserFrame");
-        const urlInput = document.getElementById("urlInput");
-        const statusEl = document.getElementById("status");
+        const iframe        = document.getElementById("browserFrame");
+        const urlInput      = document.getElementById("urlInput");
+        const settingsBtn   = document.getElementById("settingsBtn");
+        const settingsDrop  = document.getElementById("settingsDropdown");
+        const engineSelect  = document.getElementById("engineSelect");
+        const homeBtn       = document.getElementById("homeBtn");
+
+        const searchEngines = {
+            ddg:    { name: 'DuckDuckGo', url: 'https://duckduckgo.com/?q=' },
+            bing:   { name: 'Bing',       url: 'https://www.bing.com/search?q=' },
+            google: { name: 'Google',     url: 'https://www.google.com/search?q=' },
+            brave:  { name: 'Brave',      url: 'https://search.brave.com/search?q=' },
+            qwant:  { name: 'Qwant',      url: 'https://www.qwant.com/?q=' }
+        };
+
+        /* ── persisted settings ── */
+        let settings = {
+            theme: localStorage.getItem('scramjet-theme')  || 'auto',
+            engine: localStorage.getItem('scramjet-engine') || 'ddg'
+        };
 
         let scramjet = null;
-        let frame = null;
+        let frame    = null;
+        let onNewTab = true;
 
-        function setStatus(t, err = false) {
-            statusEl.textContent = t;
-            statusEl.style.color = err ? "#ff6b6b" : "#aaa";
+        /* ── theme helpers ── */
+        function getEffectiveTheme() {
+            if (settings.theme === 'auto') {
+                return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            return settings.theme;
         }
 
-        function norm(u) {
-            return u.startsWith("http") ? u : "https://" + u;
+        function applyTheme() {
+            document.documentElement.setAttribute('data-theme', getEffectiveTheme());
         }
 
+        function saveSettings() {
+            localStorage.setItem('scramjet-theme',  settings.theme);
+            localStorage.setItem('scramjet-engine', settings.engine);
+        }
+
+        function updateSettingsUI() {
+            document.querySelectorAll('.theme-toggle button').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.themeVal === settings.theme);
+            });
+            engineSelect.value = settings.engine;
+        }
+
+        /* ── new-tab page (generated dynamically so it picks up current theme + engine) ── */
+        function newTabHtml() {
+            const isDark   = getEffectiveTheme() === 'dark';
+            const bg       = isDark ? '#1a1a1a' : '#e5e5e5';
+            const shade    = isDark ? '#2d2d2d' : '#d2d2d2';
+            const select   = isDark ? '#4d4d4d' : '#b2b2b2';
+            const text     = isDark ? '#ffffff' : '#1a1a1a';
+            const muted    = isDark ? '#888888' : '#666666';
+            const engineNm = searchEngines[settings.engine].name;
+
+            return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+    height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:${bg};color:${text};font-family:'Inter',system-ui,sans-serif;
+    transition:background .2s,color .2s;
+    animation:fadeIn .35s ease;
+}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+h1{font-weight:800;font-size:56px;margin-bottom:32px;letter-spacing:-1.5px}
+.search-wrap{width:100%;max-width:580px;padding:0 20px}
+.search-box{
+    width:100%;padding:16px 24px;border-radius:16px;border:none;
+    background:${shade};color:${text};font-size:17px;outline:none;
+    font-family:inherit;transition:box-shadow .2s,background .2s;
+}
+.search-box::placeholder{color:${muted}}
+.search-box:focus{box-shadow:0 0 0 3px ${select}}
+.engine-hint{text-align:center;margin-top:14px;font-size:13px;color:${muted};font-weight:500}
+</style>
+</head>
+<body>
+<h1>Scramjet</h1>
+<div class="search-wrap">
+<input class="search-box" type="text" placeholder="Search the web..." autofocus>
+<div class="engine-hint">Searching with ${engineNm}</div>
+</div>
+<script>
+document.querySelector('.search-box').addEventListener('keydown',function(e){
+    if(e.key==='Enter'){
+        var q=e.target.value.trim();
+        if(q)window.parent.postMessage({type:'search',query:q},'*');
+    }
+});
+<\/script>
+</body>
+</html>`;
+        }
+
+        function showNewTab() {
+            onNewTab = true;
+            urlInput.value = '';
+            iframe.removeAttribute('src');
+            iframe.srcdoc = newTabHtml();
+        }
+
+        /* ── navigation: detect URL vs search query ── */
+        function navigateTo(input) {
+            const trimmed = input.trim();
+            if (!trimmed) return;
+
+            let url;
+            if (/^https?:\/\//i.test(trimmed)) {
+                url = trimmed;
+            } else if (/^[^\s]+\.[^\s]+$/.test(trimmed) && !trimmed.includes(' ')) {
+                url = 'https://' + trimmed;
+            } else {
+                url = searchEngines[settings.engine].url + encodeURIComponent(trimmed);
+            }
+
+            onNewTab = false;
+            urlInput.value = url;
+            iframe.removeAttribute('srcdoc');
+            if (frame) {
+                frame.go(url);
+            } else {
+                console.error('Scramjet not ready yet');
+            }
+        }
+
+        /* listen for search from the new-tab iframe */
+        window.addEventListener('message', e => {
+            if (e.data && e.data.type === 'search') {
+                navigateTo(e.data.query);
+            }
+        });
+
+        /* ── settings dropdown ── */
+        settingsBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const open = settingsDrop.classList.toggle('open');
+            settingsBtn.classList.toggle('active', open);
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!settingsDrop.contains(e.target) && !settingsBtn.contains(e.target)) {
+                settingsDrop.classList.remove('open');
+                settingsBtn.classList.remove('active');
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                settingsDrop.classList.remove('open');
+                settingsBtn.classList.remove('active');
+            }
+        });
+
+        /* theme toggle buttons */
+        document.querySelectorAll('.theme-toggle button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                settings.theme = btn.dataset.themeVal;
+                saveSettings();
+                applyTheme();
+                updateSettingsUI();
+                if (onNewTab) showNewTab();
+            });
+        });
+
+        /* engine select */
+        engineSelect.addEventListener('change', () => {
+            settings.engine = engineSelect.value;
+            saveSettings();
+            if (onNewTab) showNewTab();
+        });
+
+        /* react to system theme change when in auto mode */
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+            if (settings.theme === 'auto') {
+                applyTheme();
+                if (onNewTab) showNewTab();
+            }
+        });
+
+        /* ── URL bar ── */
+        urlInput.addEventListener('keydown', e => {
+            if (e.key === 'Enter') navigateTo(urlInput.value);
+        });
+
+        urlInput.addEventListener('focus', () => urlInput.select());
+
+        /* ── nav buttons ── */
+        document.getElementById('backBtn').onclick = () => {
+            if (!onNewTab) { try { iframe.contentWindow.history.back(); } catch(e){} }
+        };
+        document.getElementById('forwardBtn').onclick = () => {
+            try { iframe.contentWindow.history.forward(); } catch(e){}
+        };
+        document.getElementById('reloadBtn').onclick = () => {
+            if (onNewTab) { showNewTab(); }
+            else { try { iframe.contentWindow.location.reload(); } catch(e){} }
+        };
+        homeBtn.onclick = () => showNewTab();
+
+        /* ── Scramjet bootstrap ── */
         async function init() {
             try {
-                setStatus("Initializing...");
-
-                // Wait for the service worker (registered at the bottom) to be active.
                 await navigator.serviceWorker.ready;
 
                 const serviceworker =
                     navigator.serviceWorker.controller ??
                     (await navigator.serviceWorker.ready).active;
 
-                // STEP 3: Connect a transport to a wisp server.
-                // Use your own wisp server in production. Public ones get
-                // rate-limited and can go offline.
                 const transport = new EpoxyTransport({
                     wisp: "wss://wisp.mercurywork.shop/"
                 });
-
                 await transport.init();
 
-                // STEP 4: Create the controller. defaultConfig is fine to start with;
-                // change it if you need custom rewriting behaviour.
                 scramjet = new Controller({
                     serviceworker,
                     transport,
                     scramjetConfig: defaultConfig
                 });
-
                 await scramjet.wait();
 
-                // STEP 5: Bind a frame to the <iframe> and navigate it.
                 frame = scramjet.createFrame(iframe);
-                frame.go("https://example.com");
-
-                setStatus("Ready");
+                showNewTab();
             } catch (e) {
                 console.error(e);
-                setStatus(e.message, true);
             }
         }
 
-        // Navigate the iframe to whatever is typed in the URL bar.
-        function go() {
-            const url = norm(urlInput.value);
-            urlInput.value = url;
-            frame?.go(url);
-        }
-
-        document.getElementById("goBtn").onclick = go;
-
-        urlInput.addEventListener("keydown", e => {
-            if (e.key === "Enter") go();
-        });
+        /* ── kick everything off ── */
+        applyTheme();
+        updateSettingsUI();
 
         if ("serviceWorker" in navigator) {
             navigator.serviceWorker.register("/sw.js").then(init);
         } else {
-            setStatus("No service worker support", true);
+            console.error("No service worker support");
         }
     </script>
 </body>
