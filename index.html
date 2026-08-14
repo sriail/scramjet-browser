@@ -9,10 +9,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
-    <style>
+       <style>
         :root {
             /* Dark Mode Defaults */
-            --bg: ##111111;
+            --bg: #111111; /* Fixed typo */
             --shade: #111213;
             --select: #1F1F21;
             --text: #FFFFFF;
@@ -78,7 +78,7 @@
             border-radius: var(--radius-sm);
             cursor: pointer;
             font-size: 18px;
-            transition: background var(--t), border-color var(--t), transform var(--t);
+            transition: background var(--t), transform var(--t);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -87,10 +87,9 @@
             font-family: 'Inter', system-ui, sans-serif;
         }
 
-        /* Applied to both hover and active states for the 1px black border */
+        /* Applied to both hover and active states */
         button:hover, button.active {
             background: var(--select);
-            border-color: #000000;
         }
 
         button:active {
@@ -106,14 +105,10 @@
             background: var(--shade);
             border-radius: var(--radius);
             padding: 4px 4px 4px 16px;
-            transition: border-color var(--t), background var(--t);
+            transition: background var(--t);
             position: relative;
             height: 44px; /* Matches the search page height */
             border: 1px solid var(--select);
-        }
-
-        .url-bar:focus-within {
-            border-color: var(--text); /* Clean 1px border using text color */
         }
 
         .url-bar input {
@@ -154,7 +149,7 @@
             top: calc(100% + 6px);
             right: 0;
             background: var(--shade);
-            border: 1px solid #000000;
+            border: 1px solid var(--select); /* Replaced hard-coded #000000 with theme variable */
             border-radius: var(--radius);
             padding: 16px;
             min-width: 260px;
@@ -209,19 +204,17 @@
             border: 1px solid transparent;
             border-radius: var(--radius-xs);
             width: auto;
-            transition: background var(--t), color var(--t), border-color var(--t);
+            transition: background var(--t), color var(--t);
             font-family: 'Inter', system-ui, sans-serif;
         }
 
         .theme-toggle button.active {
             background: var(--select);
             color: var(--text);
-            border-color: #000000;
         }
 
         .theme-toggle button:hover:not(.active) {
             color: var(--text);
-            border-color: #000000;
         }
 
         .select-wrap {
@@ -239,19 +232,9 @@
             font-family: 'Inter', system-ui, sans-serif; /* Inter explicitly set */
             outline: none;
             cursor: pointer;
-            transition: border-color var(--t), background var(--t);
+            transition: background var(--t);
             appearance: none;
             -webkit-appearance: none;
-        }
-
-        .engine-select:hover {
-            border-color: #000000;
-        }
-
-        .engine-select option {
-            background: var(--shade);
-            color: var(--text);
-            font-family: 'Inter', system-ui, sans-serif;
         }
 
         .select-arrow {
