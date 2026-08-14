@@ -355,7 +355,6 @@
             const select   = isDark ? '#1F1F21' : '#E2E3E4';
             const text     = isDark ? '#FFFFFF' : '#000000';
             const muted    = isDark ? '#888888' : '#666666';
-            const engineNm = searchEngines[settings.engine].name;
 
             return `<!DOCTYPE html>
 <html lang="en">
@@ -387,7 +386,6 @@ h1{font-weight:800;font-size:48px;margin-bottom:28px;letter-spacing:-1.5px}
 <h1>Scramjet</h1>
 <div class="search-wrap">
 <input class="search-box" type="text" placeholder="Search the web..." autofocus>
-<div class="engine-hint">Searching with ${engineNm}</div>
 </div>
 <script>
 document.querySelector('.search-box').addEventListener('keydown',function(e){
